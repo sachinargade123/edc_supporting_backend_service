@@ -27,11 +27,11 @@ replicaCount: 1
 
 image:
     # -- Image to use for deploying an application
-  repository: "ghcr.io/sachinargade123/edc_supporting_backend_service/edcbackendproxy:main"
+  repository: "ghcr.io/sachinargade123/edc_supporting_backend_service/edcbackendproxy"
   # -- Set the Image Pull Policy
   pullPolicy: Always
     # -- Image tage is defined in chart appVersion.
-  tag: ""
+  tag: "main"
 
 
 imagePullSecrets: []
