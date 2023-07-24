@@ -40,7 +40,7 @@ env:
   # Use GH Container Registry instead of docker
   # github.repository equals to <account|org>/<repo>
   REGISTRY: ghcr.io
-  IMAGE_NAME: catenax-ng/edc_supporting_backend_service/dataexchange
+  IMAGE_NAME: sachinargade123/edc_supporting_backend_service/edcbackendproxy
 
 jobs:
   docker:
