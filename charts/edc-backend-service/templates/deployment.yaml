@@ -37,23 +37,7 @@ spec:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
-          env:          
-          - name: DEFAULT_EDC_HOSTNAME
-            valueFrom: 
-              secretKeyRef:
-                name: {{ include "edc-backend-service.applicationSecret.name" . }}
-                key: edchostname
-          - name: DEFAULT_EDC_APIKEYHEADER
-            valueFrom: 
-              secretKeyRef:
-                name: {{ include "edc-backend-service.applicationSecret.name" . }}
-                key: edcapikeyheader
-          - name: DEFAULT_EDC_APIKEY
-            valueFrom: 
-              secretKeyRef:
-                name: {{ include "edc-backend-service.applicationSecret.name" . }}
-                key: edcapikey
-
+          
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
