@@ -20,7 +20,7 @@
 {{- $fullName := include "edc-backend-service.fullname" . }}
 {{- $labels := include "edc-backend-service.labels" . | nindent 4 }}
 {{- $gitVersion := .Capabilities.KubeVersion.GitVersion }}
-{{- $dftbackendEndpoints := .Values.edc-backend-service.endpoints }}
+{{- $dftbackendEndpoints := .Values.dftbackend.endpoints }}
 {{- $namespace := .Release.Namespace }}
 {{- range .Values.ingresses }}
 {{- if and .enabled .endpoints }}
