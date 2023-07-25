@@ -21,10 +21,10 @@
 replicaCount: 1
 
 image:
-   repository: ghcr.io/catenax-ng/tx-managed-simple-data-exchanger-backend
+   repository: ghcr.io/sachinargade123/edc_supporting_backend_service/edcbackendproxy
    pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-   tag: ""
+   tag: "main"
 
 imagePullSecrets: []
 
