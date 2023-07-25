@@ -1,3 +1,10 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "edc-backend-service.fullname" . -}}
+{{- $ingressExtraPaths := .Values.ingress.extraPaths -}}
+{{- $svcName := include "edc-backend-service.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- if semverCompare ">=1.20-0" .Capabilities.KubeVersion.GitVersion -}}
+
 #################################################################################
 # Copyright (c) 2022,2023 T-Systems International GmbH
 # Copyright (c) 2022,2023 Contributors to the Eclipse Foundation
