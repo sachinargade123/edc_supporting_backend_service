@@ -51,13 +51,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Create name of application secret
-*/}}
-{{- define "edc-backend-service.applicationSecret.name" -}}
-{{- printf "%s-application" (include "edc-backend-service.fullname" .) }}
-{{- end }}
-
-{{/*
 Create the name of the service account to use
 */}}
 {{- define "edc-backend-service.serviceAccountName" -}}
