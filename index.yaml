@@ -3,7 +3,7 @@ entries:
   edc-backend-service:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2023-07-25T12:11:46.125196+05:30"
+    created: "2023-07-25T12:19:16.733518+05:30"
     description: proxy service for edc to get authentication token
     digest: 15c75b6ac31fcbd56000efa4dce8f6b3b7ca61ed12830e1b87052c3bba373fc3
     name: edc-backend-service
@@ -11,6 +11,6 @@ entries:
     - https://github.com/sachinargade123/edc_supporting_backend_service
     type: application
     urls:
-    - https://sachinargade123.github.io/helm-chart/edc-backend-service-0.0.1.tgz
+    - https://sachinargade123.github.io/edc_supporting_backend_service/edc-backend-service-0.0.1.tgz
     version: 0.0.1
-generated: "2023-07-25T12:11:46.12394+05:30"
+generated: "2023-07-25T12:19:16.732442+05:30"
