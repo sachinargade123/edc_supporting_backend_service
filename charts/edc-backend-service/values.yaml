@@ -73,33 +73,18 @@ service:
 ingress:
     # -- If you want to enable or disable the ingress
   enabled: false
-    # -- a reference to an Ingress Class resource that contains additional configuration including the name of the controller that should implement the class.
-  className: ""
+    # -- a reference to an Ingress Class resource that contains additional configuration including the name of the controller that should implement the class
+  className: nginx
+    # -- Annotations to add to the ingress
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  hosts:
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+
     # -- Host of the application on which application runs
-    - host: ""
-      paths:
-        - path: /
-    # -- ImplementationSpecific path type matching is up to the IngressClass. Implementations can treat this as a separate pathType or treat it identically to Prefix or Exact path types.
-          pathType: ImplementationSpecific
-  tls:
-    enabled: false
-    secretName: tls-secret
-    hosts: ""
+  host: ""
 
-drs:
-  secret:
-    # -- EDC connector Hostname 
-    edchostname: ""
-    # -- Header for EDC
-    edcapikeyheader: ""
-    # -- Key for EDC API
-    edcapikey: ""
-
-    
 resources:
   limits:
     cpu: 500m
