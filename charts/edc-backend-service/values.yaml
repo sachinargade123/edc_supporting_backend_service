@@ -1,6 +1,6 @@
 #################################################################################
-# Copyright (c) 2023 T-Systems International GmbH
-# Copyright (c) 2023 Contributors to the Eclipse Foundation
+# Copyright (c) 2021, 2022, 2023 T-Systems International GmbH
+# Copyright (c) 2021,2022,2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -17,87 +17,99 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
-# backend for SDE
+
 replicaCount: 1
 
 image:
-   repository: ghcr.io/sachinargade123/edc_supporting_backend_service/edcbackendproxy
-   pullPolicy: Always
+  repository: ghcr.io/sachinargade123/edc_supporting_backend_service/edcbackendproxy
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-   tag: "main"
+  tag: "main"
 
 imagePullSecrets: []
-
 nameOverride: ""
-
 fullnameOverride: ""
-
-portContainer: 8080
+portContainer: 10092
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  fsGroup: 2000
 
 securityContext:
   allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-  runAsNonRoot: true
-  runAsUser: 1001
-  fsGroup: 1001
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
 service:
   type: ClusterIP
   port: 10092
   targetPort: 10092
 
-backend:
+dftbackend:
   endpoints:
     ## Default api exposing health checks etc
     default:
-    # -- The network port, which the "default" api is going to be exposed by the container, pod and service
+      # -- The network port, which the "default" api is going to be exposed by the container, pod and service
       port: "10092"
-    # -- The path mapping the "default" api is going to be exposed at
-      path: /edc-proxy-service
+      # -- The path mapping the "default" api is going to be exposed at
+      path: /edc-proxy-service 
+          
 ingresses:
   - enabled: false
     className: "nginx"
     annotations: {}
-    hostname: ""
+#      kubernetes.io/ingress.class: nginx
+#      kubernetes.io/tls-acme: "true"
+    hostname: ""  
     endpoints:
-      - default
-    tls:
-      enabled: true
-      secretName: ""
+     - default
+    tls: 
+     enabled: true    
+     secretName: "edc-proxy-service "
+      # -- If present overwrites the default secret name
     certManager:
+      # -- If preset enables certificate generation via cert-manager namespace scoped issuer
+      #issuer: ""
+      # -- If preset enables certificate generation via cert-manager cluster-wide issuer
       clusterIssuer: "letsencrypt-prod"
+  #    hosts:
+  #      - chart-example.local
 
-resources:
-   limits:
-    cpu: 600m
-    memory: 2Gi
-   requests:
-    cpu: 600m
-    memory: 2Gi
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-    # Annotations to add to the service account
-  annotations: {}
-   # The name of the service account to use.
-   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  

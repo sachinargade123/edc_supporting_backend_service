@@ -1,6 +1,6 @@
 #################################################################################
-# Copyright (c) 2023 T-Systems International GmbH
-# Copyright (c) 2023 Contributors to the Eclipse Foundation
+# Copyright (c) 2021, 2022, 2023 T-Systems International GmbH
+# Copyright (c) 2021,2022,2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -20,7 +20,7 @@
 {{- $fullName := include "edc-backend-service.fullname" . }}
 {{- $labels := include "edc-backend-service.labels" . | nindent 4 }}
 {{- $gitVersion := .Capabilities.KubeVersion.GitVersion }}
-{{- $sdeEndpoints := .Values.endpoints }}
+{{- $dftbackendEndpoints := .Values.edc-backend-service.endpoints }}
 {{- $namespace := .Release.Namespace }}
 {{- range .Values.ingresses }}
 {{- if and .enabled .endpoints }}
@@ -75,9 +75,9 @@ spec:
     - host: {{ .hostname }}
       http:
         paths:
-          {{- $ingresssdeEndpoints := .endpoints }}
-          {{- range  $name, $mapping := $sdeEndpoints }}
-          {{- if (has $name $ingresssdeEndpoints) }}
+          {{- $ingressdftbackendEndpoints := .endpoints }}
+          {{- range  $name, $mapping := $dftbackendEndpoints }}
+          {{- if (has $name $ingressdftbackendEndpoints) }}
           - path: {{ $mapping.path }}
             pathType: Prefix
             backend:

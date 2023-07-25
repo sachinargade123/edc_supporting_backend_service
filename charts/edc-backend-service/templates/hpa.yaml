@@ -1,6 +1,7 @@
 #################################################################################
-# Copyright (c) 2023 T-Systems International GmbH
-# Copyright (c) 2023 Contributors to the Eclipse Foundation
+#################################################################################
+# Copyright (c) 2021, 2022, 2023 T-Systems International GmbH
+# Copyright (c) 2021,2022,2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -22,7 +23,7 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "edc-backend-service.fullname" . }}-backend
+  name: {{ include "edc-backend-service.fullname" . }}
   labels:
     {{- include "edc-backend-service.labels" . | nindent 4 }}
 spec:
