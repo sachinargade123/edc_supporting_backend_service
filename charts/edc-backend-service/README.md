@@ -1,4 +1,4 @@
-# data-exchange
+# EDC Proxy Service
 
 ![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.1](https://img.shields.io/badge/AppVersion-0.1.1-informational?style=flat-square)
 
@@ -16,7 +16,7 @@ Data exchange service is used to exchange the data between connectors
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| autoscaling.targetCPUUtilizationPercentage | int | `10092` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"Always"` | Set the Image Pull Policy |
 | image.repository | string | `"ghcr.io/sachinargade123/edc_supporting_backend_service/edcbackendproxy"` | Image to use for deploying an application |
@@ -42,8 +42,8 @@ Data exchange service is used to exchange the data between connectors
 | resources.requests.memory | string | `"300Mi"` |  |
 | securityContext.allowPrivilegeEscalation | bool | `false` | Controls whether a process can gain more privileges |
 | securityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| service.port | int | `80` | Port details for sevice |
-| service.targetPort | int | `8080` | Container Port details for sevice |
+| service.port | int | `10092` | Port details for sevice |
+| service.targetPort | int | `10092` | Container Port details for sevice |
 | service.type | string | `"ClusterIP"` | Type of service |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
