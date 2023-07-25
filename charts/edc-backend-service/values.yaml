@@ -71,19 +71,20 @@ service:
   targetPort: 10092
   
 ingress:
-    # -- If you want to enable or disable the ingress
   enabled: false
-    # -- a reference to an Ingress Class resource that contains additional configuration including the name of the controller that should implement the class
-  className: nginx
-    # -- Annotations to add to the ingress
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/use-regex: "true"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+  className: "nginx"
+  hosts:
+    - host: 
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
 
-    # -- Host of the application on which application runs
-  host: ""
+  tls:
+    enabled: true
+    secretName: tls-secret
 
 resources:
   limits:
