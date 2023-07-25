@@ -29,7 +29,6 @@ Data exchange service is used to exchange the data between connectors
 | ingress.hosts[0] | object | `{"host":"","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}` | Host of the application on which application runs |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` | ImplementationSpecific path type matching is up to the IngressClass. Implementations can treat this as a separate pathType or treat it identically to Prefix or Exact path types. |
 | ingress.tls.enabled | bool | `false` |  |
-| ingress.tls.hosts | string | `""` |  |
 | ingress.tls.secretName | string | `"tls-secret"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |

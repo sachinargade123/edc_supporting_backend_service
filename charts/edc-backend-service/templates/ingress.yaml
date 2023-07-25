@@ -1,13 +1,6 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "edc-backend-service.fullname" . -}}
-{{- $ingressExtraPaths := .Values.ingress.extraPaths -}}
-{{- $svcName := include "edc-backend-service.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
-{{- if semverCompare ">=1.20-0" .Capabilities.KubeVersion.GitVersion -}}
-
 #################################################################################
-# Copyright (c) 2022,2023 T-Systems International GmbH
-# Copyright (c) 2022,2023 Contributors to the Eclipse Foundation
+# Copyright (c) 2023 T-Systems International GmbH
+# Copyright (c) 2023 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -24,49 +17,81 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
-
+{{- $fullName := include "edc-backend-service.fullname" . }}
+{{- $labels := include "edc-backend-service.labels" . | nindent 4 }}
+{{- $gitVersion := .Capabilities.KubeVersion.GitVersion }}
+{{- $sdeEndpoints := .Values.endpoints }}
+{{- $namespace := .Release.Namespace }}
+{{- range .Values.ingresses }}
+{{- if and .enabled .endpoints }}
+{{- $ingressName := printf "%s-%s" $fullName .hostname }}
+---
+{{- if semverCompare ">=1.19-0" $gitVersion }}
 apiVersion: networking.k8s.io/v1
-{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- else if semverCompare ">=1.14-0" $gitVersion }}
 apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
+{{- else }}
 apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $ingressName }}
+  namespace: {{ $namespace | default "default" | quote }}
   labels:
-    {{- include "edc-backend-service.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+    {{- $labels | nindent 2 }}
   annotations:
+    {{- if and .className (not (semverCompare ">=1.18-0" $gitVersion)) }}
+    {{- if not (hasKey .annotations "kubernetes.io/ingress.class") }}
+    {{- $_ := set .annotations "kubernetes.io/ingress.class" .className}}
+    {{- end }}
+    {{- end }}
+    {{- if .certManager }}
+    {{- if .certManager.issuer }}
+    {{- $_ := set .annotations "cert-manager.io/issuer" .certManager.issuer}}
+    {{- end }}
+    {{- if .certManager.clusterIssuer }}
+    {{- $_ := set .annotations "cert-manager.io/cluster-issuer" .certManager.clusterIssuer}}
+    {{- end }}
+    {{- end }}
+    {{- with .annotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
-  {{- if .Values.ingress.tls.enabled }}
+  {{- if and .className (semverCompare ">=1.18-0" $gitVersion) }}
+  ingressClassName: {{ .className }}
+  {{- end }}
+  {{- if .hostname }}
+  {{- if .tls.enabled }}
   tls:
     - hosts:
-        - {{ .Values.ingress.tls.host }}
-      #secretName: "{{ include "edc-backend-service.fullname" . }}-tls"
-      secretName: "{{ .Values.ingress.tls.secretName }}"
+        - {{ .hostname }}
+      {{- if .tls.secretName }}
+      secretName: {{ .tls.secretName }}
+      {{- else }}
+      secretName: {{ $ingressName }}-tls
+      {{- end }}
   {{- end }}
-  ingressClassName: {{ .Values.ingress.className }}
   rules:
-  - host: {{ .Values.ingress.hosts.host }}
-    http:
-      paths:
-      - path: {{ default "/" .Values.ingress.pathPrefix | quote }}
-        pathType: Prefix
-        backend:
-          {{- if semverCompare ">=1.20-0" .Capabilities.KubeVersion.GitVersion }}
-          service:            
-            name: {{ $svcName }}
-            port:
-              number: {{ $svcPort }}
-          {{- else }}
-          {{- if $.Values.service.servicename }}
-            serviceName: {{ $.Values.service.servicename }}
-          {{- else }}
-            serviceName: {{ default $svcName .service }}
-          {{- end }}
-            servicePort: {{ default $svcPort .port }}
-          {{- end }}
-{{- end }}
+    - host: {{ .hostname }}
+      http:
+        paths:
+          {{- $ingresssdeEndpoints := .endpoints }}
+          {{- range  $name, $mapping := $sdeEndpoints }}
+          {{- if (has $name $ingresssdeEndpoints) }}
+          - path: {{ $mapping.path }}
+            pathType: Prefix
+            backend:
+              {{- if semverCompare ">=1.19-0" $gitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $mapping.port }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $mapping.port }}
+              {{- end }}
+        {{- end }}
+  {{- end }}
+  {{- end }}
+{{- end }}{{- /* end: if .enabled */}}
+{{- end }}{{- /* end: range .Values.ingresses */}}
