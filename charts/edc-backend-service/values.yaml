@@ -66,7 +66,7 @@ service:
     # -- Type of service
   type: ClusterIP
     # -- Port details for sevice
-  port: 80
+  port: 10092
     # -- Container Port details for sevice
   targetPort: 10092
   

@@ -16,7 +16,7 @@ Data exchange service is used to exchange the data between connectors
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
+| autoscaling.targetCPUUtilizationPercentage | int | `10092` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"Always"` | Set the Image Pull Policy |
 | image.repository | string | `"ghcr.io/sachinargade123/edc_supporting_backend_service/edcbackendproxy"` | Image to use for deploying an application |
