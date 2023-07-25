@@ -78,7 +78,7 @@ ingresses:
      - default
     tls: 
      enabled: true    
-     secretName: "edc-proxy-service "
+     secretName: "edc-proxy-service"
       # -- If present overwrites the default secret name
     certManager:
       # -- If preset enables certificate generation via cert-manager namespace scoped issuer
